@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Заявки на зміну номера</h2>
+
+<table class="table table-striped table-hover mt-3">
+    <thead>
+        <tr>
+            <th>Абонент</th>
+            <th>Старий номер</th>
+            <th>Новий номер</th>
+            <th>Дата заявки</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for r in requests %}
+    <tr>
+        <td>{{ r.lastname }} {{ r.firstname }} {{ r.middlename }}</td>
+        <td>{{ r.old_number }}</td>
+        <td>{{ r.new_number }}</td>
+        <td>{{ r.date_request }}</td>
+        <td>
+
+            <a href="{{ url_for('request_approve', req_id=r.id) }}"
+               class="btn btn-sm btn-success"
+               onclick="return confirm('Прийняти заявку і оновити номер?');">
+                ✔ Прийняти
+            </a>
+
+            <a href="{{ url_for('request_reject', req_id=r.id) }}"
+               class="btn btn-sm btn-danger"
+               onclick="return confirm('Відхилити заявку?');">
+                ✖ Відхилити
+            </a>
+
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

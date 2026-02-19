@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Користувачі системи</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Логін</th>
+            <th>Роль</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for u in users %}
+        <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.login }}</td>
+            <td>
+                <form method="post" action="{{ url_for('admin_change_role', user_id=u.id) }}" class="d-flex">
+                    <select name="role" class="form-select form-select-sm me-2">
+                    {% for r in ["guest", "user", "operator", "admin"] %}
+                        <option value="{{ r }}" {% if u.role == r %}selected{% endif %}>{{ r }}</option>
+                    {% endfor %}
+                    </select>
+                    <button class="btn btn-sm btn-outline-secondary" type="submit">OK</button>
+                </form>
+            </td>
+            <td>
+                <a href="{{ url_for('admin_delete_user', user_id=u.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Видалити користувача?')">Видалити</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

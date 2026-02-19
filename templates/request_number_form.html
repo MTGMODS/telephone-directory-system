@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Запит на зміну номера</h2>
+
+<div class="card card-body shadow-sm">
+
+    <p><strong>Старий номер:</strong> {{ old_number }}</p>
+
+    <form method="post" action="{{ url_for('request_add') }}">
+        <input type="hidden" name="subscriber_id" value="{{ sub_id }}">
+        <input type="hidden" name="old_number" value="{{ old_number }}">
+
+        <div class="mb-3">
+            <label class="form-label">Новий номер</label>
+            <input type="text" name="new_number" class="form-control" required
+                   placeholder="Введіть новий номер">
+        </div>
+
+        <button class="btn btn-primary">Надіслати заявку</button>
+    </form>
+
+</div>
+
+{% endblock %}

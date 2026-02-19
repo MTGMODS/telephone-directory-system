@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Редагувати ремонтні роботи</h2>
+
+<form method="post" class="card card-body shadow">
+
+    <h5>Адреса</h5>
+
+    <div class="mb-3">
+        <label class="form-label">Тип вулиці</label>
+        <input type="text" name="street_type" class="form-control" value="{{ repair.street_type }}">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Назва вулиці</label>
+        <input type="text" name="street_name" class="form-control" value="{{ repair.street_name }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Будинок</label>
+        <input type="text" name="building" class="form-control" value="{{ repair.building }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Квартира</label>
+        <input type="text" name="apartment" class="form-control" value="{{ repair.apartment }}">
+    </div>
+
+    <h5>Дати</h5>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Дата початку</label>
+            <input type="date" name="date_start" class="form-control" value="{{ repair.date_start }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Дата завершення</label>
+            <input type="date" name="date_end" class="form-control" value="{{ repair.date_end }}" required>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Опис</label>
+        <textarea name="description" class="form-control">{{ repair.description }}</textarea>
+    </div>
+
+    <button class="btn btn-primary">Зберегти</button>
+
+</form>
+{% endblock %}

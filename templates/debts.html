@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Абоненти з заборгованістю</h2>
+    {% if current_user.role in ['operator', 'admin'] %}
+    <button class="btn btn-success mb-3"
+            onclick="alert('Щоб додати борг, перейдіть у профіль потрібного абонента і скористайтесь кнопкою «Додати борг».');">
+        ➕ Додати боржника
+    </button>
+    {% endif %}
+
+</div>
+
+
+
+{% if current_user.role in ["user", "operator", "admin"] %}
+<div class="card card-body shadow-sm mb-4">
+    <form action="{{ url_for('debts') }}" method="get">
+        <label class="form-label">Пошук боржників (підтримуються символи * та ? для пошуку)</label>
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Введіть ім'я або прізвище або по-батькові">
+            <button class="btn btn-primary">Пошук</button>
+        </div>
+    </form>
+</div>
+{% else %}
+<div class="alert alert-warning">
+    Пошук доступний лише після <a href="{{ url_for('login') }}">входу</a> або <a href="{{ url_for('request_access') }}">реєстрації</a>.
+</div>
+{% endif %}
+
+{% if debtors %}
+<table class="table table-striped table-hover mt-3">
+    <thead>
+        <tr>
+            <th>Абонент</th>
+            <th>Загальна сума боргу</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for d in debtors %}
+        <tr>
+            <td>{{ d.lastname }} {{ d.firstname }} {{ d.middlename }}</td>
+            <td>{{ d.total_debt }}</td>
+            {% if current_user and current_user.role == 'admin' or current_user.role == 'operator' %}
+            <td>
+                <a class="btn btn-sm btn-primary" href="{{ url_for('subscriber_view', sub_id=d.id) }}">Редагувати</a>
+            </td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Немає активних боржників.</p>
+{% endif %}
+{% endblock %}

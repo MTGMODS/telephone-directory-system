@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Абоненти</h2>
+    {% if current_user and current_user.role == 'admin' %}
+        <a href="{{ url_for('subscriber_add') }}" class="btn btn-success">➕ Додати абонента</a>
+    {% endif %}
+</div>
+
+{% if current_user.role in ["user", "operator", "admin"] %}
+<div class="card card-body shadow-sm mb-4">
+    <form action="{{ url_for('search') }}" method="get">
+        <label class="form-label">Пошук абонентів по ПІБ / номеру телефона (символи * і ? підтримуються):</label>
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Введіть дані для пошуку...">
+            <button class="btn btn-primary">Пошук</button>
+        </div>
+    </form>
+</div>
+{% elif current_user.role == "guest" %}
+<div class="alert alert-warning">
+    Пошук доступний лише після <a href="{{ url_for('login') }}">входу</a> або <a href="{{ url_for('request_access') }}">реєстрації</a>.
+</div>
+{% endif %}
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Прізвище</th>
+            <th>Ім’я</th>
+            <th>По-батькові</th>
+            <th>Адреса</th>
+            <th>Пошт.індекс</th>
+            <th>Телефон</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for s in subscribers %}
+        <tr>
+            <td>{{ s.lastname }}</td>
+            <td>{{ s.firstname }}</td>
+            <td>{{ s.middlename }}</td>
+            <td>
+                {% if s.street_name %}
+                    {{ s.street_type }} {{ s.street_name }} {{ s.building }}
+                    {% if s.apartment %}, кв. {{ s.apartment }}{% endif %}
+                {% endif %}
+            </td>
+            <td>{{ s.office_number or '—' }}</td>
+            <td>
+                {{ s.main_phone or '—' }}
+                {% if current_user.role == "user" and s.main_phone %}
+                    <a class="btn btn-sm btn-primary ms-2" href="{{ url_for('request_number_page', sub_id=s.id, old_number=s.main_phone) }}">✏️</a>
+                {% endif %}
+            </td>
+            <td>
+                {% if current_user and current_user.role == 'admin' or current_user.role == 'operator' %}
+                <a href="{{ url_for('subscriber_view', sub_id=s.id) }}" class="btn btn-sm btn-primary">Редагувати</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

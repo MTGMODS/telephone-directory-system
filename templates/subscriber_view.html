@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Абонент: {{ subscriber.lastname }} {{ subscriber.firstname }} {{ subscriber.middlename }}</h2>
+    <div>
+        {% if current_user and current_user.role == 'admin' %}
+            <a href="{{ url_for('subscriber_edit', sub_id=subscriber.id) }}"
+              class="btn btn-sm btn-primary">Редагувати</a>
+            <a href="{{ url_for('subscriber_delete', sub_id=subscriber.id) }}"
+               class="btn btn-sm btn-danger"
+               data-confirm="Видалити абонента?">Видалити</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <p><strong>Адреса:</strong>
+            {% if subscriber.street_name %}
+                {{ subscriber.street_type }} {{ subscriber.street_name }} {{ subscriber.building }}
+                {% if subscriber.apartment %}, кв. {{ subscriber.apartment }}{% endif %}
+            {% else %}
+                (не вказано)
+            {% endif %}
+        </p>
+        <p><strong>Поштове відділення:</strong>
+            {% if subscriber.office_number %}
+                № {{ subscriber.office_number }}
+            {% else %}
+                (не вказано)
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Телефони</h4>
+        <table class="table table-sm table-bordered">
+            <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Тип</th>
+                <th>Оператор</th>
+                <th>Дії</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in phones %}
+            <tr>
+                <td>{{ p.number }}</td>
+                <td>{{ p.type }}</td>
+                <td>{{ p.operator_name }}</td>
+                {% if current_user.role in ["operator", "admin"] %}
+                <td>
+                    <a href="{{ url_for('phone_delete', sub_id=subscriber.id, phone_id=p.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Видалити номер?');">
+                        Видалити
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <form method="post" action="{{ url_for('phone_add', sub_id=subscriber.id) }}"
+              class="card card-body">
+            <h5>Додати телефон</h5>
+            <div class="mb-2">
+                <label class="form-label">Номер</label>
+                <input type="text" name="number" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Тип</label>
+                <select name="type" class="form-select">
+                    <option value="mobile">Мобільний</option>
+                    <option value="landline">Стаціонарний</option>
+                    <option value="service">Службовий</option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">ID оператора (опційно)</label>
+                <input type="text" name="operator_id" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mt-1">Додати</button>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <h4>Борги</h4>
+        {% if debts %}
+        <table class="table table-sm table-bordered">
+            <thead>
+            <tr>
+                <th>Сума</th>
+                <th>Початок</th>
+                <th>Дедлайн</th>
+                {% if current_user.role in ["operator", "admin"] %}
+                <th>Дії</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for d in debts %}
+            <tr>
+                <td>{{ d.amount }}</td>
+                <td>{{ d.date_start }}</td>
+                <td>{{ d.deadline }}</td>
+                {% if current_user.role in ["operator", "admin"] %}
+                <td>
+                    <a href="{{ url_for('debt_delete', sub_id=subscriber.id, debt_id=d.id) }}"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Видалити борг?');">
+                        Видалити
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Боргів немає.</p>
+        {% endif %}
+
+        <form method="post" action="{{ url_for('debt_add', sub_id=subscriber.id) }}"
+              class="card card-body">
+            <h5>Додати борг</h5>
+            <div class="mb-2">
+                <label class="form-label">Сума</label>
+                <input type="number" step="0.01" name="amount" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Дата початку</label>
+                <input type="date" name="date_start" class="form-control">
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Дедлайн</label>
+                <input type="date" name="deadline" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm mt-1">Додати борг</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

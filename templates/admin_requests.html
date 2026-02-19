@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Заявка на реєстрацію для отримання доступу</h2>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Логін</th>
+            <th>Статус</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for r in requests %}
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.login }}</td>
+            <td>{{ r.status }}</td>
+            <td>
+                {% if r.status == 'new' %}
+                <a href="{{ url_for('admin_approve_request', req_id=r.id) }}" class="btn btn-sm btn-success">Схвалити</a>
+                <a href="{{ url_for('admin_reject_request', req_id=r.id) }}" class="btn btn-sm btn-danger">Відхилити</a>
+                {% else %}
+                <span class="text-muted">Оброблено</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

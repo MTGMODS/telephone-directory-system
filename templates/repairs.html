@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Ремонтні роботи</h2>
+    {% if current_user and current_user.role == 'admin' %}
+        <a href="{{ url_for('repair_add') }}" class="btn btn-success mb-3">➕ Додати ремонт</a>
+    {% endif %}
+</div>
+
+
+{% if current_user.role in ["user", "operator", "admin"] %}
+<div class="card card-body shadow-sm mb-4">
+    <form action="{{ url_for('repairs') }}" method="get">
+        <label class="form-label">Пошук за адресою:</label>
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Наприклад: Головна">
+            <button class="btn btn-primary">Пошук</button>
+        </div>
+    </form>
+</div>
+{% else %}
+<div class="alert alert-warning">
+    Пошук доступний лише після <a href="{{ url_for('login') }}">входу</a> або <a href="{{ url_for('request_access') }}">реєстрації</a>.
+</div>
+{% endif %}
+
+
+<table class="table table-striped table-hover mt-3">
+    <thead>
+    <tr>
+        <th>Адреса</th>
+        <th>Дата початку</th>
+        <th>Дата закінчення</th>
+        <th>Опис</th>
+        {% if current_user.role in ["operator", "admin"] %}
+        <th>Дія</th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for r in repairs %}
+    <tr>
+        <td>
+            {% if r.street_name %}
+                {{ r.street_type }} {{ r.street_name }} {{ r.building }}
+                {% if r.apartment %}, кв. {{ r.apartment }}{% endif %}
+            {% endif %}
+        </td>
+        <td>{{ r.date_start }}</td>
+        <td>{{ r.date_end }}</td>
+        <td>{{ r.description }}</td>
+        {% if current_user.role in ["operator", "admin"] %}
+        <td>
+            <a href="{{ url_for('repair_edit', repair_id=r.id) }}" class="btn btn-sm btn-primary">Редагувати</a>
+            <a href="{{ url_for('repair_delete', repair_id=r.id) }}"
+               onclick="return confirm('Видалити ремонтні роботи?');"
+               class="btn btn-sm btn-danger">Видалити</a>
+        </td>
+        {% endif %}
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
