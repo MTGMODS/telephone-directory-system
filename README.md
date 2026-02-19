@@ -39,18 +39,28 @@ A web-based information system for managing telephone directory data.
 
 - SQLite local database (`db/db.sqlite`)
 
-## Installation
+## Installation (local)
 
 ```bash
 git clone https://github.com/yourusername/telephone-directory-is.git
 cd telephone-directory-is
 python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux / macOS
 source venv/bin/activate
 pip install flask
 python app.py
 ```
 
 App runs at http://localhost:5000
+
+### Production (optional)
+For production deployment you may use Gunicorn:
+```bash
+pip install gunicorn
+gunicorn --workers 4 --bind 127.0.0.1:5000 app:app
+```
 
 ## Documentation
 - Full university documentation (113 pages) is available in the /docs directory.
