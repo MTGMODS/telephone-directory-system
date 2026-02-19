@@ -1,7 +1,21 @@
 # Telephone Directory Information System
 
-University course project (2025).  
-A web-based information system for managing telephone directory data.
+This project is a web-based Telephone Directory Information System developed as a university course project (Software Engineering, 3rd year).
+
+The system provides centralized management of subscriber data, including:
+
+- Personal information
+- Addresses and streets
+- Phone numbers and mobile operators
+- Debts and payment tracking
+- Repair works
+- Special services directory
+- Registration and number change request workflows
+
+The application is built with Python and Flask, using SQLite as the relational database.  
+It supports CRUD operations, role-based access control, built-in SQL reports and custom SQL execution.
+
+The system focuses on structured data management, role separation, and extensible database architecture.
 
 ## Tech Stack
 
