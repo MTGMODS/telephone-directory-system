@@ -49,15 +49,11 @@ source venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
-App runs at:
-http://localhost:5000
 
--
+App runs at http://localhost:5000
 
-# Documentation
-Full university documentation (113 pages) is available in the /docs directory.
-
--
+## Documentation
+- Full university documentation (113 pages) is available in the /docs directory.
 
 Author: Bogdan M.
 Year: 2025
