@@ -64,6 +64,5 @@ gunicorn --workers 4 --bind 127.0.0.1:5000 app:app
 
 ## Documentation
 - Full university documentation (113 pages) is available in the /docs directory.
-
-Author: Bogdan M.
-Year: 2025
+- Author: Bogdan M.
+- Year: 2025
