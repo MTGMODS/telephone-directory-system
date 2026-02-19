@@ -1,5 +1,6 @@
 # Telephone Directory Information System
 <img width="2559" height="1230" alt="image" src="https://github.com/user-attachments/assets/05e5e0df-e08c-4174-8884-716de6c9755b" />
+-
 
 This project is a web-based Telephone Directory Information System developed as a university course project (Software Engineering, 3rd year).
 
